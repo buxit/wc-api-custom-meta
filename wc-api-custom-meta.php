@@ -3,9 +3,9 @@
 Plugin Name: WC API Custom Meta
 Plugin URI:  hhttps://github.com/judgej/wc-api-custom-meta
 Description: Allows access to custom meta fields on products through the API.
-Version:     0.6.0
+Version:     0.7.0
 Author:      Jason Judge
-Author URI:  http://academe.co.uk
+Author URI:  http://academe.co.uk https://github.com/buxit
 */
 
 /**
@@ -62,7 +62,12 @@ class Academe_Wc_Api_Custom_Meta
     );
 
     /**
-     * Initialise the hooks at plugin initialisation.
+     * Initialise all hooks at plugin initialisation.
+     * It may be worth registering the hooks in two layers, so we
+     * first check we have the capability and that WooCommerce is
+     * installed, before registering the remaining hooks. Also can
+     * check if we are being invoked by the WC API, as there is no
+     * point registering these API hooks if we aren't.
      */
     public static function initialize()
     {
@@ -93,7 +98,8 @@ class Academe_Wc_Api_Custom_Meta
     }
 
     /**
-     * Fetch a product.
+     * Fetching a product detail.
+     * Add in the custom meta fields if we have the capability.
      */
     public static function fetchCustomMeta($product_data, $product, $fields, $server) {
         // The admin and shop manager will have the capability "manage_woocommerce".
